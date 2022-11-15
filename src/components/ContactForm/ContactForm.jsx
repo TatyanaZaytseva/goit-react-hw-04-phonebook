@@ -1,72 +1,80 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import css from 'components/ContactForm/ContactForm.module.css';
 
-export class ContactForm extends Component {
-  nameInputId = nanoid();
-  numberInputId = nanoid();
+export function ContactForm({ onSubmit }) {
+  const nameInputId = nanoid();
+  const numberInputId = nanoid();
 
-  state = {
-    name: '',
-    number: '',
-  };
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-  handleInputChange = event => {
+  const handleInputChange = event => {
     const { name, value } = event.currentTarget;
-    this.setState({ [name]: value, id: nanoid() });
+
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'number':
+        setNumber(value);
+        break;
+
+      default:
+        return;
+    }
   };
 
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    this.props.onSubmit(this.state);
-    this.reset();
+    onSubmit(name, number);
+    reset();
   };
 
-  reset = () => {
-    this.setState({ name: '', number: '' });
+  const reset = () => {
+    setName('');
+    setNumber('');
   };
 
-  render() {
-    return (
-      <form
-        autoComplete="off"
-        name="Phonebook"
-        className={css.form}
-        onSubmit={this.handleSubmit}
-      >
-        <label htmlFor={this.nameInputId} className={css.label}>
-          Name <br />
-          <input
-            type="text"
-            name="name"
-            id={this.nameInputId}
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-            className={css.input}
-            value={this.state.name}
-            onChange={this.handleInputChange}
-          />
-        </label>
-        <label htmlFor={this.numberInputId} className={css.label}>
-          Number <br />
-          <input
-            type="tel"
-            name="number"
-            id={this.numberInputId}
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-            className={css.input}
-            value={this.state.number}
-            onChange={this.handleInputChange}
-          />
-        </label>
+  return (
+    <form
+      autoComplete="off"
+      name="Phonebook"
+      className={css.form}
+      onSubmit={handleSubmit}
+    >
+      <label htmlFor={nameInputId} className={css.label}>
+        Name <br />
+        <input
+          type="text"
+          name="name"
+          id={nameInputId}
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+          required
+          className={css.input}
+          value={name}
+          onChange={handleInputChange}
+        />
+      </label>
+      <label htmlFor={numberInputId} className={css.label}>
+        Number <br />
+        <input
+          type="tel"
+          name="number"
+          id={numberInputId}
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          required
+          className={css.input}
+          value={number}
+          onChange={handleInputChange}
+        />
+      </label>
 
-        <button type="submit" className={css.button}>
-          Add contact
-        </button>
-      </form>
-    );
-  }
+      <button type="submit" className={css.button}>
+        Add contact
+      </button>
+    </form>
+  );
 }
