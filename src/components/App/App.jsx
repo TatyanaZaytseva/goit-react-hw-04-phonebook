@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { ContactForm } from '../ContactForm/ContactForm';
-import { ContactsList } from '../ContactsList/ContactsList';
+import { nanoid } from 'nanoid';
+
+import { ContactForm } from 'components/ContactForm/ContactForm';
+import { ContactsList } from 'components/ContactsList/ContactsList';
 import { getContactsFtomStorage } from 'utils/localStorage';
 import { saveContactsToStorage } from 'utils/localStorage';
-import { Filter } from '../Filter/Filter';
-import { nanoid } from 'nanoid';
+import { Filter } from 'components/Filter/Filter';
 import css from 'components/App/App.module.css';
 
 export function App() {
@@ -14,10 +15,6 @@ export function App() {
     getContactsFtomStorage(STORAGE_KEY) ?? []
   );
   const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    saveContactsToStorage(contacts);
-  }, [contacts]);
 
   const formSubmitHandler = data => {
     const { name } = data;
@@ -44,6 +41,10 @@ export function App() {
   const onDeleteContact = contactID => {
     setContacts(contacts.filter(contact => contact.id !== contactID));
   };
+
+  useEffect(() => {
+    saveContactsToStorage(contacts);
+  }, [contacts]);
 
   return (
     <div className={css.container}>

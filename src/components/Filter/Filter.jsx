@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
+
 import css from 'components/Filter/Filter.module.css';
 
 export const Filter = ({ filter, onFilter }) => {
